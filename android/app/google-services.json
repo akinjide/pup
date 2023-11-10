@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "543762091250",
+    "firebase_url": "https://pup-app-a529f-default-rtdb.firebaseio.com",
+    "project_id": "pup-app-a529f",
+    "storage_bucket": "pup-app-a529f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:543762091250:android:b5b4e9b7f54610dab3946b",
+        "android_client_info": {
+          "package_name": "com.example.pup"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3sCo444T0LK2BYjILCbAxdndlYOJDjNo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
