@@ -8,25 +8,34 @@ class OnboardingHistoryScreen extends StatefulWidget {
 }
 
 class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
+  List<String> mobilityOptions = [
+    'Yes',
+    'No',
+  ];
+
+  String? hasMobility;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: const Color(0xFF4CAAEE),
-        foregroundColor: Colors.black,
+        backgroundColor: const Color(0xFF176B87),
       ),
-      backgroundColor: const Color(0xFF4CAAEE),
+      backgroundColor: const Color(0xFF176B87),
       body: SafeArea(
         child: Container(
-          padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: MediaQuery.of(context).size.width * 0.125),
+          padding: EdgeInsets.symmetric(
+            vertical: 10.0,
+            horizontal: MediaQuery.of(context).size.width * 0.125,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
+            children: [
               Container(
-                margin: const EdgeInsets.only(top: 10.0, bottom: 10.0),
+                margin: const EdgeInsets.only(bottom: 20.0),
                 child: const Image(
-                  image: AssetImage('assets/images/Login001.png'),
+                  image: AssetImage('assets/images/BMI002.png'),
                   fit: BoxFit.cover,
                   height: 150.0,
                 ),
@@ -40,35 +49,45 @@ class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
                 ),
               ),
               const SizedBox(height: 20.0),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                onChanged: (value) {
-                  print(value);
-                },
-                style: const TextStyle(
-                  color: Colors.black,
-                  fontSize: 14.0,
-                  height: 1.0,
+              Container(
+                width: 300.0,
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(30.0),
                 ),
-                decoration: const InputDecoration(
-                  hintText: 'Select Option',
-                  filled: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.horizontal(
-                      left: Radius.circular(50.0),
-                      right: Radius.circular(50.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton(
+                    hint: const Text('Select / Enter Information'),
+                    value: hasMobility,
+                    borderRadius: BorderRadius.circular(10.0),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 16.0,
                     ),
+                    icon: const Icon(Icons.arrow_drop_down_sharp),
+                    iconEnabledColor: Colors.black,
+                    items: mobilityOptions.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        hasMobility = value!;
+                      });
+                    },
                   ),
                 ),
               ),
               const SizedBox(height: 40.0),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/onboarding/complete');
+                  Navigator.pushNamed(context, '/onboarding/mobility');
                 },
                 style: OutlinedButton.styleFrom(
-                  backgroundColor: Colors.black,
+                  backgroundColor: const Color(0xFF0D1282),
                   foregroundColor: Colors.white,
                 ),
                 child: const Text('Next'),

@@ -1,6 +1,5 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:pup/services/account.dart';
 
 class OnboardingCompleteScreen extends StatefulWidget {
   const OnboardingCompleteScreen({super.key});
@@ -10,28 +9,70 @@ class OnboardingCompleteScreen extends StatefulWidget {
 }
 
 class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen> {
+  AccountService accountService = AccountService();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF4CAAEE),
+      backgroundColor: const Color(0xFF176B87),
       body: SafeArea(
-        child: Center(
-          child: Container(
-            padding: EdgeInsets.symmetric(vertical: 0.0, horizontal: MediaQuery.of(context).size.width * 0.125),
-            child: const Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'All set, Nicole',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28.0,
-                    fontWeight: FontWeight.w700,
+        child: FutureBuilder<User?>(
+          future: accountService.authUser(),
+          builder: (BuildContext context, AsyncSnapshot<User?> snapshot) {
+            if (snapshot.hasData) {
+              User? user = snapshot.data;
+              String title = 'All set';
+
+              if (user != null && user!.fullName.isNotEmpty) {
+                title = '$title, ${user.fullName.split(' ')[0]}';
+              }
+
+              return SingleChildScrollView(
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 10.0,
+                    horizontal: 0.0,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 100.0),
+                        child: const Image(
+                          image: AssetImage('assets/images/Logo001.png'),
+                          fit: BoxFit.cover,
+                          height: 100.0,
+                        ),
+                      ),
+                      Text(title,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 32.0,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 50.0),
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 10.0),
+                        child: const Image(
+                          image: AssetImage('assets/images/BMI003.png'),
+                          fit: BoxFit.cover,
+                          height: 300.0,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
+              );
+            }
+
+            return const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+                strokeWidth: 1.0,
+              ),
+            );
+          },
         ),
       ),
     );
