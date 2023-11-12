@@ -1,13 +1,9 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 class FirebaseService {
   FirebaseServiceDatabase database = FirebaseServiceDatabase();
-  // FirebaseServiceDatabase database = FirebaseServiceDatabase();
+  FirebaseServiceStorage storage = FirebaseServiceStorage();
 }
 
 class FirebaseServiceDatabase {
@@ -15,5 +11,5 @@ class FirebaseServiceDatabase {
 }
 
 class FirebaseServiceStorage {
-
+  FirebaseStorage storage = FirebaseStorage.instance;
 }
