@@ -217,7 +217,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       return SnackBarNotification.notify('User with phone already exist.');
                     }
 
-                    Navigator.pushReplacementNamed(context, '/onboarding');
+                    Navigator.pushReplacementNamed(context, '/login');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Color(0xFF0D1282),

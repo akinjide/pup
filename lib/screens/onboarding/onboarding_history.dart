@@ -93,6 +93,38 @@ class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
                 child: const Text('Next'),
               ),
               const SizedBox(height: 20.0),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(right: 20.0),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 20.0),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF749BC2),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(right: 0.0),
+                    width: 20.0,
+                    height: 20.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
         ),

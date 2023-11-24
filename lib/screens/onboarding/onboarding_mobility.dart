@@ -107,9 +107,9 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
                 ),
                 const SizedBox(height: 20.0),
                 Container(
-                  child: const Icon(
-                    Icons.add_circle_rounded,
+                  child: const Icon(Icons.add_circle_rounded,
                     size: 32.0,
+                    color: Color(0xFF91C8E4),
                   ),
                 ),
                 const SizedBox(height: 40.0),
@@ -120,12 +120,44 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
                     Navigator.pushNamed(context, '/onboarding/complete');
                   },
                   style: OutlinedButton.styleFrom(
-                    backgroundColor: Colors.black,
+                    backgroundColor: const Color(0xFF0D1282),
                     foregroundColor: Colors.white,
                   ),
                   child: const Text('Next'),
                 ),
                 const SizedBox(height: 20.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(right: 20.0),
+                      width: 20.0,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 20.0),
+                      width: 20.0,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.only(right: 0.0),
+                      width: 20.0,
+                      height: 20.0,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF749BC2),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  ],
+                ),
               ],
             ),
           ),

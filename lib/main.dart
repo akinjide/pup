@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pup/screens/home.dart';
 import 'package:pup/screens/widgets/snackbar.dart';
 import 'package:pup/services/account.dart';
 import 'firebase_options.dart';
@@ -64,7 +65,7 @@ class MyApp extends StatelessWidget {
         '/onboarding/history': (context) => const OnboardingHistoryScreen(),
         '/onboarding/mobility': (context) => const OnboardingMobilityScreen(),
         '/onboarding/complete': (context) => const OnboardingCompleteScreen(),
-        // '/home': (context) => const OnboardingCompleteScreen(),
+        '/home': (context) => const HomeScreen(),
       },
     );
   }
@@ -84,29 +85,27 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF176B87),
-      body: SafeArea(
-        child: FutureBuilder<bool>(
-          future: accountService.isAuthenticated(),
-          builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-            if (snapshot.hasData) {
-              bool? authenticated = snapshot.data;
+      body: FutureBuilder<bool>(
+        future: accountService.isAuthenticated(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          if (snapshot.hasData) {
+            bool? authenticated = snapshot.data;
 
-              if (authenticated != null && authenticated) {
-                return const LoginScreen();
-              }
-
-              return const CreateAccountScreen();
+            if (authenticated != null && authenticated) {
+              return const HomeScreen();
             }
 
-            return const Center(
-              child: Image(
-                image: AssetImage('assets/images/Logo001.png'),
-                fit: BoxFit.cover,
-                height: 100.0,
-              ),
-            );
-          },
-        ),
+            return const CreateAccountScreen();
+          }
+
+          return const Center(
+            child: Image(
+              image: AssetImage('assets/images/Logo001.png'),
+              fit: BoxFit.cover,
+              height: 100.0,
+            ),
+          );
+        },
       ),
     );
   }

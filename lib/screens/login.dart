@@ -157,9 +157,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10.0),
                 OutlinedButton(
                   onPressed: () {
-                    ImageService imageService = ImageService();
-                    imageService.upload();
-                    // Navigator.pushReplacementNamed(context, '/create_account');
+                    Navigator.pushReplacementNamed(context, '/create_account');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFF749BC2),
