@@ -1,4 +1,3 @@
-
 import 'package:firebase_database/firebase_database.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +10,7 @@ class User {
   final String phoneNumber;
   final String pin;
   final bool isNew;
+  final double bmi;
 
   User({
     required this.userID,
@@ -19,6 +19,7 @@ class User {
     required this.phoneNumber,
     required this.pin,
     required this.isNew,
+    this.bmi = 0,
   });
 
   factory User.fromJson(Map<dynamic, dynamic>json) {
@@ -29,6 +30,7 @@ class User {
       phoneNumber: json['phone_number'],
       pin: json['pin'],
       isNew: json['is_new'],
+      bmi: json['bmi'],
     );
   }
 }
@@ -71,7 +73,7 @@ class AccountService {
     return null;
   }
 
-  Future<String?> activeId() async {
+  static Future<String?> activeId() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('user_id');
   }

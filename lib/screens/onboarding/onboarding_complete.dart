@@ -13,6 +13,10 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Future.delayed(const Duration(seconds: 5), () async {
+      Navigator.pushNamed(context, '/home');
+    });
+
     return Scaffold(
       backgroundColor: const Color(0xFF176B87),
       body: SafeArea(

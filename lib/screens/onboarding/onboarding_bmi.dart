@@ -12,6 +12,7 @@ List<String> heightOptions = [
   'm',
   'in',
 ];
+
 List<String> weightOptions = [
   'kg',
   'lbs',
@@ -222,7 +223,7 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                   onPressed: () async {
                     AccountService accountService = AccountService();
                     // should use logged in user ID
-                    String? userId = await accountService.activeId();
+                    String? userId = await AccountService.activeId();
 
                     double bmi = 0;
                     double height = double.parse(heightValue!);
@@ -234,22 +235,13 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
 
                     // Imperial Unit
                     if (heightUnit == 'in' && weightUnit == 'lbs') {
-                      bmi = (weight / (height * height)) * 703;
+                      bmi = (((weight * 703) / height) / height);
                       // Metric Unit
                     } else if (heightUnit == 'm' && weightUnit == 'kg') {
                       bmi = weight / (height * height);
                     } else {
                       return SnackBarNotification.notify('Invalid weight and height unit');
                     }
-
-                    print(<String, dynamic>{
-                      "gender": genderValue,
-                      "height": heightValue,
-                      "height_unit": heightUnit,
-                      "weight": weightValue,
-                      "weight_unit": weightUnit,
-                      "bmi": bmi,
-                    });
 
                     bool updateOk = await accountService.update(userId, <String, dynamic>{
                       "gender": genderValue,

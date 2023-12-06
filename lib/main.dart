@@ -2,7 +2,12 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:pup/screens/contact.dart';
 import 'package:pup/screens/home.dart';
+import 'package:pup/screens/logs.dart';
+import 'package:pup/screens/notifications.dart';
+import 'package:pup/screens/profile.dart';
+import 'package:pup/screens/settings.dart';
 import 'package:pup/screens/widgets/snackbar.dart';
 import 'package:pup/services/account.dart';
 import 'firebase_options.dart';
@@ -66,6 +71,11 @@ class MyApp extends StatelessWidget {
         '/onboarding/mobility': (context) => const OnboardingMobilityScreen(),
         '/onboarding/complete': (context) => const OnboardingCompleteScreen(),
         '/home': (context) => const HomeScreen(),
+        '/profile': (context) => const ProfileScreen(),
+        '/logs': (context) => const LogsScreen(),
+        '/settings': (context) => const SettingsScreen(),
+        '/notifications': (context) => const NotificationsScreen(),
+        '/contact': (context) => const ContactScreen(),
       },
     );
   }
@@ -96,6 +106,12 @@ class _HomeState extends State<Home> {
             }
 
             return const CreateAccountScreen();
+          }
+
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
           }
 
           return const Center(
