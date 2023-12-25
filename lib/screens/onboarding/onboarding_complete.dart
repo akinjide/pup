@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:pup/services/account.dart';
 
+import '../widgets/snackbar.dart';
+
 class OnboardingCompleteScreen extends StatefulWidget {
   const OnboardingCompleteScreen({super.key});
 
@@ -13,8 +15,8 @@ class _OnboardingCompleteScreenState extends State<OnboardingCompleteScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Future.delayed(const Duration(seconds: 5), () async {
-      Navigator.pushNamed(context, '/home');
+    Future.delayed(const Duration(seconds: 3), () async {
+      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/home');
     });
 
     return Scaffold(

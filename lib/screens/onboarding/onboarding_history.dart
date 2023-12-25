@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/dropdown.dart';
+import '../widgets/snackbar.dart';
+
 class OnboardingHistoryScreen extends StatefulWidget {
   const OnboardingHistoryScreen({super.key});
 
@@ -21,6 +24,7 @@ class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: true,
         backgroundColor: const Color(0xFF176B87),
+        foregroundColor: const Color(0xFFFFFFFF),
       ),
       backgroundColor: const Color(0xFF176B87),
       body: SafeArea(
@@ -41,7 +45,7 @@ class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
                 ),
               ),
               const Text(
-                'Do you have any specific mobility challenges or difficult we should be aware of? if "Yes" enter details or "No", you can skip this page.',
+                'Do you have any specific mobility challenges or difficult we should be aware of? if \'Yes\' enter details or \'No\', you can skip this page.',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 24.0,
@@ -56,35 +60,30 @@ class _OnboardingHistoryScreenState extends State<OnboardingHistoryScreen> {
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30.0),
                 ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton(
-                    hint: const Text('Select / Enter Information'),
-                    value: hasMobility,
-                    borderRadius: BorderRadius.circular(10.0),
-                    style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16.0,
-                    ),
-                    icon: const Icon(Icons.arrow_drop_down_sharp),
-                    iconEnabledColor: Colors.black,
-                    items: mobilityOptions.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (String? value) {
-                      setState(() {
-                        hasMobility = value!;
-                      });
-                    },
-                  ),
+                child: Dropdown(
+                  hintText: 'Select / Enter Information',
+                  value: hasMobility,
+                  items: mobilityOptions.map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String? value) {
+                    setState(() {
+                      hasMobility = value!;
+                    });
+                  },
                 ),
               ),
               const SizedBox(height: 40.0),
               OutlinedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/onboarding/mobility');
+                  if (hasMobility != null && hasMobility == mobilityOptions[0]) {
+                    SnackBarNotification.navigatorKey.currentState?.pushNamed('/onboarding/mobility');
+                  } else {
+                    SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/onboarding/complete');
+                  }
                 },
                 style: OutlinedButton.styleFrom(
                   backgroundColor: const Color(0xFF0D1282),

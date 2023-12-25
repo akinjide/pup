@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:pup/screens/widgets/loader.dart';
 
-import '../services/account.dart';
-import '../services/authenticate.dart';
-import '../services/record.dart';
+import 'package:pup/services/account.dart';
+import 'package:pup/services/authenticate.dart';
+
+import '../../services/notification.dart';
+import '../widgets/snackbar.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -19,12 +22,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF176B87),
+      appBar: AppBar(
+        automaticallyImplyLeading: true,
+        backgroundColor: const Color(0xFF176B87),
+        foregroundColor: const Color(0xFFFFFFFF),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
             keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
             child: Padding(
               padding: const EdgeInsets.symmetric(
-                vertical: 10.0,
                 horizontal: 20.0,
               ),
               child: Column(
@@ -49,7 +56,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               const Image(
                                 image: AssetImage('assets/images/User001.png'),
                                 fit: BoxFit.cover,
-                                height: 60.0,
+                                height: 120.0,
                               ),
                               const SizedBox(height: 20.0),
                               Text(title,
@@ -64,18 +71,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         );
                       }
 
-                      return const Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 1.0,
-                        ),
-                      );
+                      return const Loader();
                     },
                   ),
-                  const SizedBox(height: 60.0),
+                  const SizedBox(height: 40.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/home');
+                      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/home');
                     },
                     child: const Row(
                       children: [
@@ -96,7 +98,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 30.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/settings');
+                      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/settings');
                     },
                     child: const Row(
                       children: [
@@ -117,7 +119,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 30.0),
                   GestureDetector(
                     onTap: () {
-                      Navigator.pushNamed(context, '/contact');
+                      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/contact');
                     },
                     child: const Row(
                       children: [
@@ -137,8 +139,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   ),
                   const SizedBox(height: 30.0),
                   GestureDetector(
-                    onTap: () {
-                      // Navigator.pushNamed(context, '/contact');
+                    onTap: () async {
+                      bool ok = await accountService.delete();
+
+                      if (ok) {
+                        SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/login');
+                      }
                     },
                     child: const Row(
                       children: [
@@ -159,10 +165,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   const SizedBox(height: 30.0),
                   GestureDetector(
                     onTap: () async {
+                      NotificationService.cancelSchedule();
                       bool ok = await authenticateService.logout();
 
                       if (ok) {
-                        Navigator.pushNamed(context, '/login');
+                        SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/login');
                       }
                     },
                     child: const Row(

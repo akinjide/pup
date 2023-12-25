@@ -1,29 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:pup/screens/widgets/input.dart';
+
+import 'package:pup/screens/widgets/dropdown.dart';
+import 'package:pup/screens/widgets/help.dart';
 import 'package:pup/screens/widgets/loader.dart';
+import 'package:pup/screens/widgets/snackbar.dart';
 import 'package:pup/services/account.dart';
 import 'package:pup/services/image.dart';
 import 'package:pup/services/recommendation.dart';
 import 'package:pup/services/record.dart';
 import 'package:pup/utils/utils.dart';
 
-import '../widgets/help.dart';
-import '../widgets/indicator.dart';
-import '../widgets/dropdown.dart';
-import '../widgets/snackbar.dart';
-
-class OnboardingMobilityScreen extends StatefulWidget {
-  const OnboardingMobilityScreen({super.key});
+class AddLogScreen extends StatefulWidget {
+  const AddLogScreen({super.key});
 
   @override
-  State<OnboardingMobilityScreen> createState() => _OnboardingMobilityScreenState();
+  State<AddLogScreen> createState() => _AddLogScreenState();
 }
 
-class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
+class _AddLogScreenState extends State<AddLogScreen> {
   ImageService imageService = ImageService();
   RecordService recordService = RecordService();
-  AccountService accountService = AccountService();
   RecommendationService recommendationService = RecommendationService();
   final ImagePicker _picker = ImagePicker();
   XFile? image;
@@ -78,6 +75,10 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
         automaticallyImplyLeading: true,
         backgroundColor: const Color(0xFF176B87),
         foregroundColor: const Color(0xFFFFFFFF),
+        title: const Text('Add Pressure Ulcer', style: TextStyle(
+            fontWeight: FontWeight.w600,
+          ),
+        ),
       ),
       backgroundColor: const Color(0xFF176B87),
       body: SafeArea(
@@ -97,24 +98,11 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      const Stack(
-                        children: [
-                          Text(
-                            'Add Current Pressure Ulcer information. Skip if none',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          Positioned(
-                            bottom: -10.0,
-                            right: 0.0,
-                            child: Help(),
-                          ),
-                        ],
+                      const Align(
+                        alignment: Alignment.bottomRight,
+                        child: Help(),
                       ),
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 0.0),
                       Container(
                         child: ListView.separated(
                           shrinkWrap: true,
@@ -185,10 +173,10 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
                                         Container(
                                           width: MediaQuery.of(context).size.width * 0.5,
                                           child: Text(_medicalRecords[index].picture.isNotEmpty
-                                              ? _medicalRecords[index].picture
-                                              : ImagePicker().supportsImageSource(ImageSource.gallery)
-                                                ? 'Open Gallery'
-                                                : 'Open Camera',
+                                            ? _medicalRecords[index].picture
+                                            : ImagePicker().supportsImageSource(ImageSource.gallery)
+                                              ? 'Open Gallery'
+                                              : 'Open Camera',
                                             style: const TextStyle(
                                               fontSize: 14.0,
                                               height: 1.0,
@@ -258,22 +246,21 @@ class _OnboardingMobilityScreenState extends State<OnboardingMobilityScreen> {
                       const SizedBox(height: 40.0),
                       OutlinedButton(
                         onPressed: () async {
-                          bool recordCreated = await recordService.create(_medicalRecords, userId!);
+                          bool done = await recordService.create(_medicalRecords, userId!);
 
-                          if (recordCreated) {
-                            SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/onboarding/complete');
-                          } else {
-                            SnackBarNotification.notify('Error creating records. Try again.');
+                          if (!done) {
+                            return SnackBarNotification.notify('An error occurred. Try again');
                           }
+
+                          SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/home');
                         },
                         style: OutlinedButton.styleFrom(
                           backgroundColor: const Color(0xFF0D1282),
                           foregroundColor: Colors.white,
                         ),
-                        child: const Text('Next'),
+                        child: const Text('Save'),
                       ),
                       const SizedBox(height: 20.0),
-                      const Indicator(),
                     ],
                   ),
                 ),

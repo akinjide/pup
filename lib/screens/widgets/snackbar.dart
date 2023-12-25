@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class SnackBarNotification {
   SnackBarNotification._();
 
+  static GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   static GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 
   static notify(String message) {

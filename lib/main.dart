@@ -1,28 +1,42 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:pup/screens/contact.dart';
-import 'package:pup/screens/home.dart';
-import 'package:pup/screens/logs.dart';
-import 'package:pup/screens/notifications.dart';
-import 'package:pup/screens/profile.dart';
-import 'package:pup/screens/settings.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+import 'package:pup/screens/logs/add_log.dart';
+import 'package:pup/screens/main/contact.dart';
+import 'package:pup/screens/logs/logs.dart';
+import 'package:pup/screens/main/home.dart';
+import 'package:pup/screens/main/notifications.dart';
+import 'package:pup/screens/main/profile.dart';
+import 'package:pup/screens/main/settings.dart';
 import 'package:pup/screens/widgets/snackbar.dart';
 import 'package:pup/services/account.dart';
-import 'firebase_options.dart';
-
-import 'package:pup/screens/create_account.dart';
-import 'package:pup/screens/login.dart';
+import 'package:pup/screens/auth/create_account.dart';
+import 'package:pup/screens/auth/login.dart';
 import 'package:pup/screens/onboarding/onboarding_bmi.dart';
 import 'package:pup/screens/onboarding/onboarding_complete.dart';
 import 'package:pup/screens/onboarding/onboarding_history.dart';
 import 'package:pup/screens/onboarding/onboarding_mobility.dart';
+import 'package:pup/services/notification.dart';
+import 'firebase_options.dart';
 
 Future main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    AndroidInitializationSettings initializationSettingsAndroid = const AndroidInitializationSettings('app_icon');
+    DarwinInitializationSettings initializationSettingsIOS = const DarwinInitializationSettings();
+    InitializationSettings initializationSettings = InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+      macOS: null,
+    );
 
+    await NotificationService.flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveBackgroundNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
+      onDidReceiveNotificationResponse: NotificationService.onDidReceiveNotificationResponse,
+    );
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
@@ -42,23 +56,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       scaffoldMessengerKey: SnackBarNotification.rootScaffoldMessengerKey,
+      navigatorKey: SnackBarNotification.navigatorKey,
       title: 'Bloom',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a blue toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
@@ -73,6 +73,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => const HomeScreen(),
         '/profile': (context) => const ProfileScreen(),
         '/logs': (context) => const LogsScreen(),
+        '/logs/add': (context) => const AddLogScreen(),
         '/settings': (context) => const SettingsScreen(),
         '/notifications': (context) => const NotificationsScreen(),
         '/contact': (context) => const ContactScreen(),

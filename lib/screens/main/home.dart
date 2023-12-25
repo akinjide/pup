@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:pup/screens/contact.dart';
-import 'package:pup/screens/dashboard.dart';
-import 'package:pup/screens/logs.dart';
-import 'package:pup/screens/notifications.dart';
+import 'package:pup/screens/main/contact.dart';
+import 'package:pup/screens/logs/logs.dart';
+
+import 'dashboard.dart';
+import 'notifications.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

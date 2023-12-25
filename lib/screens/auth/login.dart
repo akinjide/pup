@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:crypto/crypto.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
-import 'package:pup/screens/widgets/snackbar.dart';
-import 'package:pup/services/firebase.dart';
-import 'package:pup/services/image.dart';
 
-import '../services/account.dart';
-import '../services/authenticate.dart';
+import 'package:pup/screens/widgets/snackbar.dart';
+import 'package:pup/services/account.dart';
+import 'package:pup/services/authenticate.dart';
+import 'package:pup/screens/widgets/input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -72,22 +68,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   ],
                 ),
                 const SizedBox(height: 20.0),
-                TextFormField(
-                  keyboardType: TextInputType.phone,
-                  onChanged: (value) {
+                InputField(
+                  onChanged: (String value) {
                     setState(() { phone = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
+                  keyboardType: TextInputType.phone,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.person),
-                    hintText: 'Phone number',
                     filled: true,
-                    labelStyle: TextStyle(
-                    ),
+                    hintText: 'Phone number',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.horizontal(
                         left: Radius.circular(50.0),
@@ -97,18 +86,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 10.0),
-                TextFormField(
+                InputField(
                   maxLength: 6,
-                  keyboardType: TextInputType.number,
                   obscureText: true,
-                  onChanged: (value) {
+                  onChanged: (String value) {
                     setState(() { pin = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
+                  keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Icons.lock),
                     hintText: 'Pin',
@@ -137,9 +121,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     }
 
                     if (user.isNew) {
-                      Navigator.pushReplacementNamed(context, '/onboarding');
+                      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/onboarding');
                     } else {
-                      Navigator.pushReplacementNamed(context, '/home');
+                      SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/home');
                     }
                   },
                   style: OutlinedButton.styleFrom(
@@ -157,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 10.0),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/create_account');
+                    SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/create_account');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFF749BC2),

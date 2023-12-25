@@ -4,8 +4,10 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:pup/screens/widgets/snackbar.dart';
 
-import '../services/account.dart';
-import '../services/authenticate.dart';
+import '../../services/account.dart';
+import '../../services/authenticate.dart';
+import '../widgets/input.dart';
+import '../widgets/loader.dart';
 
 class CreateAccountScreen extends StatefulWidget {
   const CreateAccountScreen({super.key});
@@ -20,7 +22,6 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   String phone = '';
   String pin = '';
   String confirmPin = '';
-
   bool loading = false;
 
   @override
@@ -29,12 +30,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return const Scaffold(
         backgroundColor: Color(0xFF176B87),
         body: SafeArea(
-          child: Center(
-            child: CircularProgressIndicator(
-              color: Colors.white,
-              strokeWidth: 1.0,
-            ),
-          ),
+          child: Loader(),
         ),
       );
     }
@@ -62,123 +58,49 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   fit: BoxFit.cover,
                   height: 150.0,
                 ),
-                TextFormField(
-                  keyboardType: TextInputType.text,
-                  onChanged: (value) {
+                InputField(
+                  onChanged: (String value) {
                     setState(() { fullName = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Full name',
-                    filled: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(50.0),
-                        right: Radius.circular(50.0),
-                      ),
-                    ),
-                  ),
+                  keyboardType: TextInputType.text,
+                  hintText: 'Full name',
                 ),
                 const SizedBox(height: 10.0),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
+                InputField(
+                  onChanged: (String value) {
                     setState(() { phone = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Phone number',
-                    filled: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(50.0),
-                        right: Radius.circular(50.0),
-                      ),
-                    ),
-                  ),
+                  keyboardType: TextInputType.phone,
+                  hintText: 'Phone number',
                 ),
                 const SizedBox(height: 10.0),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
+                InputField(
+                  maxLength: 4,
+                  onChanged: (String value) {
                     setState(() { birthYear = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Birth year',
-                    filled: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(50.0),
-                        right: Radius.circular(50.0),
-                      ),
-                    ),
-                  ),
+                  keyboardType: TextInputType.number,
+                  hintText: 'Birth year',
                 ),
                 const SizedBox(height: 10.0),
-                TextFormField(
+                InputField(
                   maxLength: 6,
                   obscureText: true,
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
+                  onChanged: (String value) {
                     setState(() { pin = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Create PIN',
-                    filled: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(50.0),
-                        right: Radius.circular(50.0),
-                      ),
-                    ),
-                  ),
+                  keyboardType: TextInputType.number,
+                  hintText: 'Create PIN',
                 ),
                 const SizedBox(height: 10.0),
-                TextFormField(
+                InputField(
                   maxLength: 6,
                   obscureText: true,
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
+                  onChanged: (String value) {
                     setState(() { confirmPin = value; });
                   },
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontSize: 14.0,
-                    height: 1.0,
-                  ),
-                  decoration: const InputDecoration(
-                    hintText: 'Confirm PIN',
-                    filled: true,
-                    contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.horizontal(
-                        left: Radius.circular(50.0),
-                        right: Radius.circular(50.0),
-                      ),
-                    ),
-                  ),
+                  keyboardType: TextInputType.number,
+                  hintText: 'Confirm PIN',
                 ),
                 const SizedBox(height: 20.0),
                 OutlinedButton(
@@ -217,7 +139,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       return SnackBarNotification.notify('User with phone already exist.');
                     }
 
-                    Navigator.pushReplacementNamed(context, '/login');
+                    SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/login');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: Color(0xFF0D1282),
@@ -234,7 +156,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 const SizedBox(height: 10.0),
                 OutlinedButton(
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/login');
+                    SnackBarNotification.navigatorKey.currentState?.pushReplacementNamed('/login');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFF749BC2),

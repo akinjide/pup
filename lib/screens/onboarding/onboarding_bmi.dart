@@ -1,22 +1,12 @@
 import 'package:flutter/material.dart';
+
 import 'package:pup/services/account.dart';
+import 'package:pup/screens/widgets/snackbar.dart';
+import 'package:pup/utils/utils.dart';
+import 'package:pup/screens/widgets/input.dart';
+import 'package:pup/screens/widgets/dropdown.dart';
 
-import '../widgets/snackbar.dart';
-
-List<String> genderOptions = [
-  'Male',
-  'Female',
-];
-
-List<String> heightOptions = [
-  'm',
-  'in',
-];
-
-List<String> weightOptions = [
-  'kg',
-  'lbs',
-];
+import '../../services/notification.dart';
 
 class OnboardingBMIScreen extends StatefulWidget {
   const OnboardingBMIScreen({super.key});
@@ -26,6 +16,7 @@ class OnboardingBMIScreen extends StatefulWidget {
 }
 
 class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
+  AccountService accountService = AccountService();
   String? genderValue;
   String? heightValue;
   String heightUnit = heightOptions.first;
@@ -71,29 +62,20 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(30.0),
                   ),
-                  child: DropdownButtonHideUnderline(
-                    child: DropdownButton(
-                      hint: const Text('Select Gender'),
-                      value: genderValue,
-                      borderRadius: BorderRadius.circular(10.0),
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16.0,
-                      ),
-                      icon: const Icon(Icons.arrow_drop_down_sharp),
-                      iconEnabledColor: Colors.black,
-                      items: genderOptions.map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (String? value) {
-                        setState(() {
-                          genderValue = value!;
-                        });
-                      },
-                    ),
+                  child: Dropdown(
+                    hintText: 'Select Gender',
+                    value: genderValue,
+                    items: genderOptions.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (String? value) {
+                      setState(() {
+                        genderValue = value!;
+                      });
+                    },
                   ),
                 ),
                 const SizedBox(height: 10.0),
@@ -101,28 +83,12 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.52,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
+                      child: InputField(
                         onChanged: (value) {
                           setState(() { heightValue = value; });
                         },
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.0,
-                          height: 1.0,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: 'Enter height',
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(50.0),
-                              right: Radius.circular(50.0),
-                            ),
-                          ),
-                        ),
+                        keyboardType: TextInputType.number,
+                        hintText: 'Enter height',
                       ),
                     ),
                     const SizedBox(width: 10.0),
@@ -132,27 +98,18 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: heightUnit,
-                          icon: const Icon(Icons.arrow_drop_down_sharp),
-                          iconEnabledColor: Colors.black,
-                          borderRadius: BorderRadius.circular(10.0),
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                          items: heightOptions.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() { heightUnit = value!; });
-                          },
-                        ),
+                      child: Dropdown(
+                        hintText: '',
+                        value: heightUnit,
+                        items: heightOptions.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          setState(() { heightUnit = value!; });
+                        },
                       ),
                     ),
                   ],
@@ -162,28 +119,12 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                   children: [
                     Container(
                       width: MediaQuery.of(context).size.width * 0.52,
-                      child: TextFormField(
-                        keyboardType: TextInputType.number,
-                        onChanged: (value) {
+                      child: InputField(
+                        onChanged: (String value) {
                           setState(() { weightValue = value; });
                         },
-                        style: const TextStyle(
-                          color: Colors.black,
-                          fontSize: 14.0,
-                          height: 1.0,
-                        ),
-                        decoration: const InputDecoration(
-                          hintText: 'Enter weight',
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsets.symmetric(horizontal: 20.0),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.horizontal(
-                              left: Radius.circular(50.0),
-                              right: Radius.circular(50.0),
-                            ),
-                          ),
-                        ),
+                        keyboardType: TextInputType.number,
+                        hintText: 'Enter weight',
                       ),
                     ),
                     const SizedBox(width: 10.0),
@@ -193,27 +134,18 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(30.0),
                       ),
-                      child: DropdownButtonHideUnderline(
-                        child: DropdownButton(
-                          value: weightUnit,
-                          icon: const Icon(Icons.arrow_drop_down_sharp),
-                          iconEnabledColor: Colors.black,
-                          borderRadius: BorderRadius.circular(10.0),
-                          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                          style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 16.0,
-                          ),
-                          items: weightOptions.map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              value: value,
-                              child: Text(value),
-                            );
-                          }).toList(),
-                          onChanged: (String? value) {
-                            setState(() { weightUnit = value!; });
-                          },
-                        ),
+                      child: Dropdown(
+                        hintText: '',
+                        value: weightUnit,
+                        items: weightOptions.map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (String? value) {
+                          setState(() { weightUnit = value!; });
+                        },
                       ),
                     ),
                   ],
@@ -221,42 +153,33 @@ class _OnboardingBMIScreenState extends State<OnboardingBMIScreen> {
                 const SizedBox(height: 40.0),
                 OutlinedButton(
                   onPressed: () async {
-                    AccountService accountService = AccountService();
-                    // should use logged in user ID
                     String? userId = await AccountService.activeId();
+                    double bmi = AccountService.calculateBMI(
+                      heightValue!,
+                      weightValue!,
+                      heightUnit,
+                      weightUnit,
+                    );
 
-                    double bmi = 0;
-                    double height = double.parse(heightValue!);
-                    double weight = double.parse(weightValue!);
-
-                    if (height == 0 || weight == 0) {
+                    if (bmi == -1) {
                       return SnackBarNotification.notify('Invalid weight and height');
                     }
 
-                    // Imperial Unit
-                    if (heightUnit == 'in' && weightUnit == 'lbs') {
-                      bmi = (((weight * 703) / height) / height);
-                      // Metric Unit
-                    } else if (heightUnit == 'm' && weightUnit == 'kg') {
-                      bmi = weight / (height * height);
-                    } else {
-                      return SnackBarNotification.notify('Invalid weight and height unit');
-                    }
-
                     bool updateOk = await accountService.update(userId, <String, dynamic>{
-                      "gender": genderValue,
-                      "height": heightValue,
-                      "height_unit": heightUnit,
-                      "weight": weightValue,
-                      "weight_unit": weightUnit,
-                      "bmi": bmi,
+                      'gender': genderValue,
+                      'height': heightValue,
+                      'height_unit': heightUnit,
+                      'weight': weightValue,
+                      'weight_unit': weightUnit,
+                      'bmi': bmi,
+                      'is_new': false,
                     });
 
                     if (!updateOk) {
                       return SnackBarNotification.notify('Error calculating BMI. Try again.');
                     }
 
-                    Navigator.pushNamed(context, '/onboarding/history');
+                    SnackBarNotification.navigatorKey.currentState?.pushNamed('/onboarding/history');
                   },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xFF0D1282),

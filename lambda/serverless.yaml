@@ -1,0 +1,40 @@
+service: pup
+
+frameworkVersion: ">=1.1.0 <=2.50.0"
+
+provider:
+  name: aws
+  runtime: nodejs14.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - "rekognition:*"
+        - "s3:*"
+      Resource: "*"
+
+functions:
+  label:
+      handler: handler.label
+      memorySize: 2048 # optional, in MB, default is 1024
+      environment:
+        BUCKET: ${self:custom.bucket}
+      events:
+       - http:
+           path: /label
+           method: post
+
+  ping:
+      handler: handler.ping
+      events:
+       - http:
+           path: /ping
+           method: get
+
+plugins:
+  - serverless-localstack
+
+custom:
+  bucket: ''
+  localstack:
+    stages:
+      - local

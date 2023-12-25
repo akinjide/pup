@@ -1,8 +1,10 @@
+import 'dart:math';
+
 import 'package:d_chart/commons/data_model.dart';
 import 'package:d_chart/commons/enums.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:pup/services/account.dart';
+import 'package:pup/utils/utils.dart';
 
 import 'firebase.dart';
 
@@ -40,18 +42,18 @@ class RecordService {
   FirebaseServiceDatabase fsdb = FirebaseServiceDatabase();
 
   Future<bool> create(List<Record> records, String userId) async {
-    DatabaseReference ref = fsdb.database.ref("records/$userId");
+    DatabaseReference ref = fsdb.database.ref('records/$userId');
 
     for (var element in records) {
       DatabaseReference recordRef = ref.push();
 
       await recordRef.set({
-        "user_id": userId,
-        "record_id": recordRef.key,
-        "added_at": element.addedAt.toIso8601String(),
-        "severity": element.severity,
-        "body_part": element.bodyPart,
-        "picture": element.picture,
+        'user_id': userId,
+        'record_id': recordRef.key,
+        'added_at': element.addedAt.toIso8601String(),
+        'severity': element.severity,
+        'body_part': element.bodyPart,
+        'picture': element.picture,
       });
     }
 
@@ -60,7 +62,7 @@ class RecordService {
 
   Future<List<Record>> list() async {
     String? userId = await AccountService.activeId();
-    final recentRecordsRef = fsdb.database.ref("records/$userId").limitToLast(100);
+    final recentRecordsRef = fsdb.database.ref('records/$userId').limitToLast(100);
     final snapshot = await recentRecordsRef.get();
     List<Record> records = [];
 
@@ -76,36 +78,53 @@ class RecordService {
     return records;
   }
 
-  Future<TimeGroup> logs(Color color) async {
+  Future<List<TimeGroup>> logs() async {
     List<Record> records = await list();
-    List<TimeData> data = [];
+    List<TimeGroup> group = [];
+    Map<String, List<TimeData>> data = {};
 
     for (var element in records) {
-      int severity = 0;
-
-      switch (element.severity) {
-        case 'Stage 1':
-          severity = 1;
-          break;
-        case 'Stage 2':
-          severity = 2;
-          break;
-        case 'Stage 3':
-          severity = 3;
-          break;
-        case 'Stage 4':
-          severity = 4;
-          break;
+      if (!data.containsKey(element.bodyPart)) {
+        data[element.bodyPart] = [];
       }
 
-      data.add(TimeData(domain: element.addedAt, measure: severity));
+      int severity = determineSeverity(element);
+      data[element.bodyPart]?.add(TimeData(domain: element.addedAt, measure: severity));
     }
 
-    return TimeGroup(
-        id: '1',
-        chartType: ChartType.line,
-        color: color,
-        data: data
-    );
+    data.forEach((key, value) {
+      group.add(
+        TimeGroup(
+          id: key,
+          chartType: ChartType.line,
+          color: bodyPartsColors[key],
+          data: value,
+        )
+      );
+    });
+
+    return group;
   }
+
+  int determineSeverity(Record element) {
+    int severity = 0;
+
+    switch (element.severity) {
+      case 'Stage 1':
+        severity = 1;
+        break;
+      case 'Stage 2':
+        severity = 2;
+        break;
+      case 'Stage 3':
+        severity = 3;
+        break;
+      case 'Stage 4':
+        severity = 4;
+        break;
+    }
+
+    return severity;
+  }
+
 }

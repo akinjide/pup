@@ -11,13 +11,13 @@ class ImageService {
     Reference ref = fss.storage.ref(path);
 
     try {
-      final image = File(file!.path);
+      File image = File(file!.path);
       TaskSnapshot snapshot = await ref.putFile(image);
 
       if (snapshot.state == TaskState.success) {
         return await snapshot.ref.getDownloadURL();
       } else if (snapshot.state == TaskState.error) {
-        print("error");
+        print('error');
       }
     } on FirebaseException catch (e) {
       print(e);
